@@ -10,7 +10,7 @@
 
 <nav>
 
-  <h2>TaskPilot Dashboard</h2>
+  <h2>TaskManager Dashboard</h2>
 
   <button onclick="logout()">Logout</button>
 
@@ -72,7 +72,9 @@
         <option value="completed">Completed</option>
       </select>
 
-      <input type="text" id="projectId" placeholder="Enter Project ID">
+    <select id="projectId">
+  <option value="">Select Project</option>
+</select>
 
       <button type="submit">Create Task</button>
 
@@ -113,6 +115,7 @@
         <tr>
           <th>Title</th>
           <th>Status</th>
+          <th>Actions</th>
         </tr>
       </thead>
 

@@ -44,8 +44,8 @@ async function getProjects() {
 
   const response = await fetch(`${BASE_URL}/api/projects`, {
 
-    headers: {
-      Authorization: `Bearer ${token}`
+    headers:{
+      Authorization:`Bearer ${token}`
     }
 
   });
@@ -54,13 +54,25 @@ async function getProjects() {
 
   let rows = "";
 
-  data.projects.forEach((project) => {
+  const projectSelect = document.getElementById("projectId");
+
+  projectSelect.innerHTML = `
+    <option value="">Select Project</option>
+  `;
+
+  data.projects.forEach((project)=>{
 
     rows += `
       <tr>
         <td>${project.title}</td>
         <td>${project.description}</td>
       </tr>
+    `;
+
+    projectSelect.innerHTML += `
+      <option value="${project._id}">
+        ${project.title}
+      </option>
     `;
 
   });
@@ -91,6 +103,17 @@ async function getTasks() {
       <tr>
         <td>${task.title}</td>
         <td>${task.status}</td>
+        <td>
+
+    <button onclick="updateTask('${task._id}')">
+      Update
+    </button>
+
+    <button onclick="deleteTask('${task._id}')">
+      Delete
+    </button>
+
+  </td>
       </tr>
     `;
 
@@ -175,6 +198,49 @@ document.getElementById("taskForm")
   getDashboardStats();
 
 });
+async function deleteTask(id){
+
+  await fetch(`${BASE_URL}/api/tasks/${id}`, {
+
+    method:"DELETE",
+
+    headers:{
+      Authorization:`Bearer ${token}`
+    }
+
+  });
+
+  getTasks();
+
+  getDashboardStats();
+
+}
+async function updateTask(id){
+
+  const status = prompt(
+    "Enter status: pending, in-progress, completed"
+  );
+
+  await fetch(`${BASE_URL}/api/tasks/${id}`, {
+
+    method:"PUT",
+
+    headers:{
+      "Content-Type":"application/json",
+      Authorization:`Bearer ${token}`
+    },
+
+    body:JSON.stringify({
+      status
+    })
+
+  });
+
+  getTasks();
+
+  getDashboardStats();
+
+}
 
 
 
